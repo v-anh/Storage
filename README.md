@@ -40,6 +40,9 @@ Storage is an GRDB Database wrapper in Swift.
 
 - Base on [Good Practices for Designing Record Types](https://github.com/groue/GRDB.swift/blob/master/Documentation/GoodPracticesForDesigningRecordTypes.md)
 
+
+## Usage
+
 Before insert or fetching record from Database, Migration is required to difine the name, type of column in table
  - Migration
     ```swift
@@ -56,6 +59,8 @@ Before insert or fetching record from Database, Migration is required to difine 
     }
     ```
 - Define Data Object
+ 
+ 
  ```swift
 public struct ZADObjectRGDB:Codable, GRDBEntityType {
     public var id:Int64
@@ -79,8 +84,52 @@ public struct ZADObjectRGDB:Codable, GRDBEntityType {
         static let dataKey = Column(CodingKeys.dataKey)
         static let objects = Column(CodingKeys.objects)
     }
-}```
+}
+```
+
+- Make query interface
+```swift
+public protocol ZADStorageType {
+    func save(_ entity: ZADObjectRGDB, for nameSpace: String) throws
+    func get(for key:String, nameSpace: String) throws -> ZADObjectRGDB?
+}
+
+extension GRDBContext: ZADStorageType {
+    public func save(_ entity: ZADObjectRGDB, for nameSpace: String) throws {
+        try self.createOrUpdate(entity, for: nameSpace)
+    }
+    
+    public func get(for key:String, nameSpace: String) throws -> ZADObjectRGDB? {
+        return try fetch(for: key, nameSpace: nameSpace)
+    }
+}
+```
+
+- Define Client 
+```swift
+public protocol ClientType {
+    var zad: ZADStorageType { get }
+}
+```
 
 
-## Usage
+- Setup StorageManager
+```swift
+    do {
+            let grdbContext = try GRDBContext(in: application)
+            StorageManager.setup(storageContext: grdbContext)
+        }catch {
+            print(error)
+    }
+```
+
+- Request data
+```swift
+    do {
+        let zadObject = ZADObjectRGDB(id: 0, dataKey: "newkey", object: Data())
+            try StorageManager.shared.storageContext?.zad.save(zadObject, for: "SG")
+        }catch {
+            print(error)
+    }
+```
 

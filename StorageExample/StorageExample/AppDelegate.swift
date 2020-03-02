@@ -19,9 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do {
             let grdbContext = try GRDBContext(in: application)
             StorageManager.setup(storageContext: grdbContext)
-            let zadObject = ZADObjectRGDB(id: 0, dataKey: "key", object: Data())
-            try StorageManager.shared.storageContext?.zad.save(zadObject, for: "SG")
-            
         }catch {
             print(error)
         }
