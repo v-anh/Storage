@@ -121,7 +121,6 @@
 		66684ADE240768130026DBA5 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				66684AF62407683F0026DBA5 /* Storage.swift */,
 				66684C7D2407CE540026DBA5 /* Source */,
 				66684C802407CE850026DBA5 /* Supporting Files */,
 			);
@@ -175,6 +174,7 @@
 		66684C812407CEB50026DBA5 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				66684AF62407683F0026DBA5 /* Storage.swift */,
 				66684C822407CED00026DBA5 /* StorageErrors.swift */,
 			);
 			path = Core;

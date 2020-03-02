@@ -10,15 +10,9 @@ import Foundation
 import GRDB
 import UIKit
 
-public typealias GRDBEntityType = FetchableRecord & PersistableRecord
-
-protocol GRDBType {
-    var dbQueue : DatabaseQueue { get }
-    static var migrator: DatabaseMigrator { get set }
-}
-
-public final class GRDBContext {
-    internal var dbQueue : DatabaseQueue
+public final class GRDBContext: StorageType {
+    private var dbQueue : DatabaseQueue
+    public var zad: ZADStorageType { return self }
     
     public init(in application: UIApplication) throws {
         let databaseURL = try FileManager.default
@@ -35,16 +29,43 @@ public final class GRDBContext {
 }
 
 extension GRDBContext {
-    internal class var migrator: DatabaseMigrator {
+    public static var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
         migrator.eraseDatabaseOnSchemaChange = true
         migrator.registerMigration("Zalora-v1") { database in
             try database.create(table: ZADObjectRGDB.databaseTableName) { tableDefinition in
                 tableDefinition.column("id",.integer).primaryKey()
                 tableDefinition.column("dataKey",.text)
-                tableDefinition.column("objects",.blob)
+                tableDefinition.column("object",.blob)
             }
         }
         return migrator
+    }
+}
+
+extension GRDBContext {
+    public func createOrUpdate<T:GRDBEntityType>(_ entity: T, for nameSpace: String) throws {
+           try dbQueue.inDatabase { db in
+               if try entity.exists(db) {
+                   try entity.update(db)
+               }else {
+                   try entity.insert(db)
+               }
+           }
+       }
+    
+    
+    public func fetch<T:GRDBEntityType>(for key:String, nameSpace: String) throws -> T? {
+      return try dbQueue.inDatabase { db in
+          let result = try T.filter(key == key).fetchOne(db)
+          return result
+        }
+        
+    }
+    
+    public func delete<T:GRDBEntityType>(_ entity: T, for nameSpace: String) throws {
+        return try dbQueue.inDatabase { db in
+            try entity.delete(db)
+        }
     }
 }

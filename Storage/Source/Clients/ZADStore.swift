@@ -16,20 +16,11 @@ public protocol ZADStorageType {
 
 extension GRDBContext: ZADStorageType {
     public func save(_ entity: ZADObjectRGDB, for nameSpace: String) throws {
-        try dbQueue.inDatabase { db in
-            if try entity.exists(db) {
-                try entity.update(db)
-            }else {
-                try entity.insert(db)
-            }
-        }
+        try self.createOrUpdate(entity, for: nameSpace)
     }
     
     public func get(for key:String, nameSpace: String) throws -> ZADObjectRGDB? {
-        return try dbQueue.inDatabase { db in
-            let result = try ZADObjectRGDB.filter(key == key).fetchOne(db)
-            return result
-        }
+        return try fetch(for: key, nameSpace: nameSpace)
     }
 }
 
