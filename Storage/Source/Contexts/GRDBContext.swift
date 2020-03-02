@@ -10,48 +10,6 @@ import Foundation
 import GRDB
 import UIKit
 
-//public struct GRDBStorageEntity {
-//    public var id:Int64
-//    public var dataKey:String
-//    public var object:Data
-//
-//    public init(id:Int64, object: Data,dataKey: String) {
-//        self.id = id
-//        self.object = object
-//        self.dataKey = dataKey
-//    }
-//}
-//
-//// Adopt FetchableRecord
-//extension StorageEntity : FetchableRecord {
-//    public init(row: Row) {
-//        id = row["id"]
-//        object = row["object"]
-//        dataKey = row["dataKey"]
-//    }
-//}
-//
-//// Adopt TableRecord
-//extension StorageEntity: TableRecord {
-//    public static let databaseTableName = "zaloratable"
-//}
-//
-//// Adopt MutablePersistableRecord
-//extension StorageEntity: MutablePersistableRecord {
-//    public func encode(to container: inout PersistenceContainer) {
-//        container["id"] = id
-//        container["object"] = object
-//        container["dataKey"] = dataKey
-//    }
-//
-//    mutating public func didInsert(with rowID: Int64, for column: String?) {
-//        id = rowID
-//    }
-//}
-
-typealias GRDBEntityType = FetchableRecord & PersistableRecord
-
-
 extension Record: StorageType {
 }
 
@@ -114,8 +72,7 @@ extension GRDBContext: StorageContext {
         }
         return try dbQueue.inDatabase { db in
             let result = try entityToFetch.filter(key == key).fetchAll(db)
-//            completion(result.compactMap { $0 as? T })
-            return result.compactMap{ $0 as? T }
+            return result as? [T]
         }
     }
 }
