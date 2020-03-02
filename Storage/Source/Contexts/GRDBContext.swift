@@ -10,54 +10,19 @@ import Foundation
 import GRDB
 import UIKit
 
-//public struct GRDBStorageEntity {
-//    public var id:Int64
-//    public var dataKey:String
-//    public var object:Data
-//
-//    public init(id:Int64, object: Data,dataKey: String) {
-//        self.id = id
-//        self.object = object
-//        self.dataKey = dataKey
-//    }
-//}
-//
-//// Adopt FetchableRecord
-//extension StorageEntity : FetchableRecord {
-//    public init(row: Row) {
-//        id = row["id"]
-//        object = row["object"]
-//        dataKey = row["dataKey"]
-//    }
-//}
-//
-//// Adopt TableRecord
-//extension StorageEntity: TableRecord {
-//    public static let databaseTableName = "zaloratable"
-//}
-//
-//// Adopt MutablePersistableRecord
-//extension StorageEntity: MutablePersistableRecord {
-//    public func encode(to container: inout PersistenceContainer) {
-//        container["id"] = id
-//        container["object"] = object
-//        container["dataKey"] = dataKey
-//    }
-//
-//    mutating public func didInsert(with rowID: Int64, for column: String?) {
-//        id = rowID
-//    }
-//}
-
-typealias GRDBEntityType = FetchableRecord & PersistableRecord
+public typealias GRDBEntityType = FetchableRecord & PersistableRecord
 
 
-extension Record: StorageType {
+protocol GRDBType {
+    var dbQueue : DatabaseQueue { get }
+    static var migrator: DatabaseMigrator { get set }
 }
 
 public final class GRDBContext {
+    internal var dbQueue : DatabaseQueue
     
-    public var dbQueue : DatabaseQueue
+    public var zad: ZADStorageType { return self }
+    
     public init(in application: UIApplication) throws {
         let databaseURL = try FileManager.default
             .url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
@@ -70,10 +35,8 @@ public final class GRDBContext {
         try GRDBContext.migrator.migrate(dbQueue)
         dbQueue.setupMemoryManagement(in: application)
     }
-}
-
-extension GRDBContext {
-    static var migrator: DatabaseMigrator {
+    
+    internal class var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("createDevelopers") { database in
             try database.create(table: "ZADObjectRGDB") { tableDefinition in
@@ -86,38 +49,32 @@ extension GRDBContext {
     }
 }
 
-extension GRDBContext: StorageContext {
-    public func addOrUpdate(_ entity: StorageType, for nameSpace: String) throws {
-        guard entity is Record else {
-            throw StorageErrors.Entity.wrongType
-        }
+
+//============Client===================
+public protocol ZADStorageType {
+    func save(_ entity: ZADObjectRGDB, for nameSpace: String) throws
+    func get(for key:String, nameSpace: String) throws -> ZADObjectRGDB?
+}
+
+extension GRDBContext: ZADStorageType {
+    public func save(_ entity: ZADObjectRGDB, for nameSpace: String) throws {
         try dbQueue.inDatabase { db in
-            try (entity as? Record)?.delete(db)
-            try (entity as? Record)?.insert(db)
+            if try entity.exists(db) {
+                try entity.update(db)
+            }else {
+                try entity.insert(db)
+            }
         }
     }
     
-    //    public func addOrUpdate<T:StorageType>(_ entity: T, for nameSpace: String) throws {
-    //        guard entity is Record else {
-    //            throw StorageErrors.Entity.wrongType
-    //        }
-    //        try dbQueue.inDatabase { db in
-    //            try (entity as? Record)?.delete(db)
-    //            try (entity as? Record)?.insert(db)
-    //        }
-    //    }
-    
-    
-    public func fetch<T: StorageType>(with key: String, for type: T.Type) throws -> [T]? {
-        guard let entityToFetch = type as? Record.Type else {
-            throw StorageErrors.Entity.wrongType
-        }
+    public func get(for key:String, nameSpace: String) throws -> ZADObjectRGDB? {
         return try dbQueue.inDatabase { db in
-            let result = try entityToFetch.filter(key == key).fetchAll(db)
-//            completion(result.compactMap { $0 as? T })
-            return result.compactMap{ $0 as? T }
+            let result = try ZADObjectRGDB.filter(key == key).fetchOne(db)
+            return result
         }
     }
+    
+    
 }
 
 public protocol ZADObject:class {
@@ -126,7 +83,7 @@ public protocol ZADObject:class {
     var object:Data { get set }
 }
 
-public final class ZADObjectRGDB: Record {
+public final class ZADObjectRGDB: GRDBEntityType {
     public var id:Int64
     public var dataKey:String
     public var object:Data
@@ -135,10 +92,9 @@ public final class ZADObjectRGDB: Record {
         self.id = id
         self.dataKey = dataKey
         self.object = object
-        super.init()
     }
     
-    override public class var databaseTableName: String {
+    public class var databaseTableName: String {
         return "ZADObjectRGDB"
     }
     
@@ -146,18 +102,15 @@ public final class ZADObjectRGDB: Record {
         id = row["id"]
         object = row["object"]
         dataKey = row["dataKey"]
-        super.init()
     }
     
-    public override func encode(to container: inout PersistenceContainer) {
+    public func encode(to container: inout PersistenceContainer) {
         container["id"] = id
         container["object"] = object
         container["dataKey"] = dataKey
     }
     
-    public override func didInsert(with rowID: Int64, for column: String?) {
+    public func didInsert(with rowID: Int64, for column: String?) {
         id = rowID
     }
 }
-
-//extension ZADObjectRGDB: ZADObject {}
