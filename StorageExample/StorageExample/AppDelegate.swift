@@ -8,7 +8,6 @@
 
 import UIKit
 import Storage
-import GRDB
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,22 +16,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        
-        
         do {
             let grdbContext = try GRDBContext(in: application)
             StorageManager.setup(storageContext: grdbContext)
-            let a = ZADObjectRGDB(id: 0, dataKey: "key", object: Data())
-            try StorageManager.shared.storageContext?.addOrUpdate(a, for: "v-anh")
+            let zadObject = ZADObjectRGDB(id: 0, dataKey: "key", object: Data())
+            try StorageManager.zad?.save(zadObject, for: "SG")
+            
         }catch {
             print(error)
         }
         
-        
         do {
-            let a = try StorageManager.shared.storageContext?.fetch(with: "key", for: ZADObjectRGDB.self)
-            print(a)
+            let result = try StorageManager.zad?.get(for: "key", nameSpace: "SG")
+            print(result?.dataKey)
         }catch {
             print(error)
         }
@@ -54,22 +50,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-}
-
-struct Player: Codable, FetchableRecord, MutablePersistableRecord {
-    var id: Int64
-    var name: String
-    var score: Int
-    
-    // Define database columns from CodingKeys
-    private enum Columns {
-        static let id = Column(CodingKeys.id)
-        static let name = Column(CodingKeys.name)
-        static let score = Column(CodingKeys.score)
-    }
-    
-    // Update a player id after it has been inserted in the database.
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        id = rowID
-    }
 }
