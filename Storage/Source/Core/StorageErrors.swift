@@ -17,14 +17,3 @@ public struct StorageErrors {
         case wrongType
     }
 }
-
-public protocol StorageType: class {
-    
-}
-public protocol StorageContext: class {
-   typealias FetchCompletionClosure<T> = ([T]?) -> Void
-        
-    func addOrUpdate(_ entity: StorageType, for nameSpace: String) throws
-    
-    func fetch<T: StorageType>(with key: String, for type: T.Type) throws -> [T]?
-}

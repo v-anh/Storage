@@ -16,21 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        
-        
         do {
             let grdbContext = try GRDBContext(in: application)
             StorageManager.setup(storageContext: grdbContext)
             let zadObject = ZADObjectRGDB(id: 0, dataKey: "key", object: Data())
-            try StorageManager.shared.storageContext?.zad.save(zadObject, for: "SG")
+            try StorageManager.zad?.save(zadObject, for: "SG")
+            
         }catch {
             print(error)
         }
         
-        
         do {
-            let result = try StorageManager.shared.storageContext?.zad.get(for: "key", nameSpace: "SG")
+            let result = try StorageManager.zad?.get(for: "key", nameSpace: "SG")
             print(result?.dataKey)
         }catch {
             print(error)

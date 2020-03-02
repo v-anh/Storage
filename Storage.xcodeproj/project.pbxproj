@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		661DE306240CF35100C64C4F /* ZADStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661DE305240CF35100C64C4F /* ZADStore.swift */; };
 		66684AE6240768130026DBA5 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66684ADC240768130026DBA5 /* Storage.framework */; };
 		66684AEB240768130026DBA5 /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684AEA240768130026DBA5 /* StorageTests.swift */; };
 		66684AED240768130026DBA5 /* Storage.h in Headers */ = {isa = PBXBuildFile; fileRef = 66684ADF240768130026DBA5 /* Storage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		66684AF72407683F0026DBA5 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684AF62407683F0026DBA5 /* Storage.swift */; };
 		66684C2E240776380026DBA5 /* GRDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66684C24240776090026DBA5 /* GRDB.framework */; };
 		66684C2F240776380026DBA5 /* GRDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 66684C24240776090026DBA5 /* GRDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		66684C832407CED00026DBA5 /* StorageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684C822407CED00026DBA5 /* StorageContext.swift */; };
+		66684C832407CED00026DBA5 /* StorageErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684C822407CED00026DBA5 /* StorageErrors.swift */; };
 		66684C862407CFF60026DBA5 /* GRDBContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684C852407CFF60026DBA5 /* GRDBContext.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		661DE305240CF35100C64C4F /* ZADStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZADStore.swift; sourceTree = "<group>"; };
 		66684ADC240768130026DBA5 /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66684ADF240768130026DBA5 /* Storage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Storage.h; path = ../Storage.h; sourceTree = "<group>"; };
 		66684AE0240768130026DBA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
@@ -64,7 +66,7 @@
 		66684AEC240768130026DBA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66684AF62407683F0026DBA5 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		66684C12240776080026DBA5 /* GRDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GRDB.xcodeproj; path = "Storage/Vendors/GRDB.swift-4.10.0/GRDB.xcodeproj"; sourceTree = "<group>"; };
-		66684C822407CED00026DBA5 /* StorageContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageContext.swift; sourceTree = "<group>"; };
+		66684C822407CED00026DBA5 /* StorageErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageErrors.swift; sourceTree = "<group>"; };
 		66684C852407CFF60026DBA5 /* GRDBContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBContext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,6 +90,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		661DE302240CF34100C64C4F /* Clients */ = {
+			isa = PBXGroup;
+			children = (
+				661DE305240CF35100C64C4F /* ZADStore.swift */,
+			);
+			path = Clients;
+			sourceTree = "<group>";
+		};
 		66684AD2240768130026DBA5 = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +156,7 @@
 		66684C7D2407CE540026DBA5 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				661DE302240CF34100C64C4F /* Clients */,
 				66684C842407CFE40026DBA5 /* Contexts */,
 				66684C812407CEB50026DBA5 /* Core */,
 			);
@@ -164,7 +175,7 @@
 		66684C812407CEB50026DBA5 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				66684C822407CED00026DBA5 /* StorageContext.swift */,
+				66684C822407CED00026DBA5 /* StorageErrors.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -312,8 +323,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				66684C862407CFF60026DBA5 /* GRDBContext.swift in Sources */,
+				661DE306240CF35100C64C4F /* ZADStore.swift in Sources */,
 				66684AF72407683F0026DBA5 /* Storage.swift in Sources */,
-				66684C832407CED00026DBA5 /* StorageContext.swift in Sources */,
+				66684C832407CED00026DBA5 /* StorageErrors.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
