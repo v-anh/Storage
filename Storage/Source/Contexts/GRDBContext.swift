@@ -32,14 +32,17 @@ public final class GRDBContext {
         try GRDBContext.migrator.migrate(dbQueue)
         dbQueue.setupMemoryManagement(in: application)
     }
-    
+}
+
+extension GRDBContext {
     internal class var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
-        migrator.registerMigration("createDevelopers") { database in
-            try database.create(table: "ZADObjectRGDB") { tableDefinition in
+        migrator.eraseDatabaseOnSchemaChange = true
+        migrator.registerMigration("Zalora-v1") { database in
+            try database.create(table: ZADObjectRGDB.databaseTableName) { tableDefinition in
                 tableDefinition.column("id",.integer).primaryKey()
                 tableDefinition.column("dataKey",.text)
-                tableDefinition.column("object",.blob)
+                tableDefinition.column("objects",.blob)
             }
         }
         return migrator

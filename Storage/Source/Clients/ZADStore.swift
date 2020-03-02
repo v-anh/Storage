@@ -31,10 +31,9 @@ extension GRDBContext: ZADStorageType {
             return result
         }
     }
-    
-    
 }
-public final class ZADObjectRGDB: GRDBEntityType {
+
+public struct ZADObjectRGDB:Codable, GRDBEntityType {
     public var id:Int64
     public var dataKey:String
     public var object:Data
@@ -45,24 +44,16 @@ public final class ZADObjectRGDB: GRDBEntityType {
         self.object = object
     }
     
-    public class var databaseTableName: String {
+    //Define database table name
+    public static var databaseTableName: String {
         return "ZADObjectRGDB"
     }
     
-    public required init(row: Row) {
-        id = row["id"]
-        object = row["object"]
-        dataKey = row["dataKey"]
-    }
-    
-    public func encode(to container: inout PersistenceContainer) {
-        container["id"] = id
-        container["object"] = object
-        container["dataKey"] = dataKey
-    }
-    
-    public func didInsert(with rowID: Int64, for column: String?) {
-        id = rowID
+    // Define database columns from CodingKeys
+    enum Columns {
+        static let id = Column(CodingKeys.id)
+        static let dataKey = Column(CodingKeys.dataKey)
+        static let objects = Column(CodingKeys.object)
     }
 }
 
