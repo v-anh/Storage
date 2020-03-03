@@ -132,4 +132,8 @@ public protocol ClientType {
             print(error)
     }
 ```
-
+## State of the project
+- Sync between Storage Entity with Main App Entity. There are still dependencies between the Main App and Storagle:
+ + Storage Entity need confirm with `GRDBEntityType` that is part of the GRDB, so if it is exposed to the Main App, then Main
+App depend in GRDB -> that may go against the abstraction purpose
+ + A function that covert the Main App Entity to the Storage Entity will resolve dependency issue?
