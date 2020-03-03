@@ -10,35 +10,37 @@ import Foundation
 import GRDB
 
 public protocol ClientType {
-    var zad: ZADStorageType { get }
+//    var zad: ZADStorageType { get }
 }
 
 public protocol GRDBType {
     static var migrator: DatabaseMigrator { get }
-    func createOrUpdate<T:GRDBEntityType>(_ entity: T, for nameSpace: String) throws
-    func fetch<T:GRDBEntityType>(for key:String, nameSpace: String) throws -> T?
-    func delete<T:GRDBEntityType>(_ entity: T, for nameSpace: String) throws
+    func createOrUpdate<T: GRDBEntityType>(_ entity: T, for nameSpace: String) throws
+    func fetch<T: GRDBEntityType>(for key: String, nameSpace: String) throws -> T?
+    func delete<T: GRDBEntityType>(_ entity: T, for nameSpace: String) throws
 }
 
-public typealias GRDBEntityType = FetchableRecord & PersistableRecord
+public typealias GRDBEntityType = Codable & FetchableRecord & PersistableRecord
 public typealias StorageType = ClientType & GRDBType
 
 public struct StorageConfiguration {
     public let path: String
-    public init(_ path:String){
+    public init(_ path: String) {
         self.path = path
     }
 }
 
 public class StorageManager {
     // MARK: - Public properties
+
     public static var shared = StorageManager()
-    
+
     public static func setup(storageContext: StorageType) {
         shared.storageContext = storageContext
     }
-    
+
     // MARK: - Private properties
+
     public var storageContext: StorageType?
 }
 

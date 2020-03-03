@@ -24,22 +24,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         do {
-            let result = try StorageManager.shared.storageContext?.zad.get(for: "key", nameSpace: "SG")
-            print(result?.dataKey)
+            let result:ZADObject? = try StorageManager.shared.storageContext?.zad.get(for: "key", nameSpace: "SG")
+            print(String(describing: result?.dataKey))
         }catch {
             print(error)
         }
         
         do {
-            let zadObject = ZADObjectRGDB(id: 0, dataKey: "newkey", object: Data())
+            let zadObject = ZADObject(id: 0, dataKey: "newKey1", object: Data())
             try StorageManager.shared.storageContext?.zad.save(zadObject, for: "SG")
         }catch {
             print(error)
         }
         
         do {
-            let result = try StorageManager.shared.storageContext?.zad.get(for: "newkey", nameSpace: "SG")
-            print(result?.dataKey)
+            let result:ZADObject? = try StorageManager.shared.storageContext?.zad.get(for: "", nameSpace: "SG")
+            print(String(describing: result?.dataKey))
         }catch {
             print(error)
         }
@@ -62,3 +62,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
 }
+
+
