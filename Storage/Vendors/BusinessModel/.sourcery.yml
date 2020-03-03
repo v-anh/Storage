@@ -1,0 +1,6 @@
+sources:
+  - BusinessModel
+templates:
+  - BusinessModel/Sourcery/Templates
+output:
+  BusinessModel/Sourcery/Generated/

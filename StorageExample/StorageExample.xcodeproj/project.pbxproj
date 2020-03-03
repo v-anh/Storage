@@ -16,7 +16,6 @@
 		66684C622407C81A0026DBA5 /* StorageExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684C612407C81A0026DBA5 /* StorageExampleTests.swift */; };
 		66684C6E2407C87B0026DBA5 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66684C6D2407C87B0026DBA5 /* Storage.framework */; };
 		66684C6F2407C87B0026DBA5 /* Storage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 66684C6D2407C87B0026DBA5 /* Storage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		66894B1E240E2FCE00B29491 /* ZADObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66894B1D240E2FCE00B29491 /* ZADObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +55,6 @@
 		66684C612407C81A0026DBA5 /* StorageExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageExampleTests.swift; sourceTree = "<group>"; };
 		66684C632407C81A0026DBA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66684C6D2407C87B0026DBA5 /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		66894B1D240E2FCE00B29491 /* ZADObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZADObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +98,6 @@
 		66684C492407C8180026DBA5 /* StorageExample */ = {
 			isa = PBXGroup;
 			children = (
-				66894B1C240E2FAE00B29491 /* Model */,
 				66684C4A2407C8180026DBA5 /* AppDelegate.swift */,
 				66684C4C2407C8180026DBA5 /* SceneDelegate.swift */,
 				66684C4E2407C8180026DBA5 /* ContentView.swift */,
@@ -135,14 +132,6 @@
 				66684C6D2407C87B0026DBA5 /* Storage.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		66894B1C240E2FAE00B29491 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				66894B1D240E2FCE00B29491 /* ZADObject.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -247,7 +236,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66894B1E240E2FCE00B29491 /* ZADObject.swift in Sources */,
 				66684C4B2407C8180026DBA5 /* AppDelegate.swift in Sources */,
 				66684C4D2407C8180026DBA5 /* SceneDelegate.swift in Sources */,
 				66684C4F2407C8180026DBA5 /* ContentView.swift in Sources */,

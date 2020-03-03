@@ -10,9 +10,17 @@ import Foundation
 import GRDB
 import UIKit
 
+public typealias GRDBEntityType = FetchableRecord & PersistableRecord
+
+
 public final class GRDBContext: StorageType {
-    private var dbQueue: DatabaseQueue
-    //    public var zad: ZADStorageType { return self }
+    
+    
+    public var zad: ZADStorageType { return self }
+    public var feed: FeedStorageType { return self }
+    public var address: AddressStorageType { return self }
+    
+    var dbQueue: DatabaseQueue
 
     public init(in application: UIApplication) throws {
         let databaseURL = try FileManager.default
@@ -33,37 +41,20 @@ extension GRDBContext {
         var migrator = DatabaseMigrator()
         migrator.eraseDatabaseOnSchemaChange = true
         migrator.registerMigration("Zalora-v1") { database in
-            try database.create(table: "ZADObject") { tableDefinition in
+            try database.create(table: "zadObjectGRDB") { tableDefinition in
                 tableDefinition.column("id", .integer).primaryKey()
                 tableDefinition.column("dataKey", .text)
+                tableDefinition.column("locationName", .text)
+                tableDefinition.column("language", .text)
                 tableDefinition.column("object", .blob)
+            }
+            
+            try database.create(table: "feedRGDB") { tableDefinition in
+                tableDefinition.autoIncrementedPrimaryKey("id")
+                tableDefinition.column("feedName", .text)
+                tableDefinition.column("feedPosition", .text)
             }
         }
         return migrator
-    }
-}
-
-extension GRDBContext {
-    public func createOrUpdate<T: GRDBEntityType>(_ entity: T, for _: String) throws {
-        try dbQueue.inDatabase { db in
-            if try entity.exists(db) {
-                try entity.update(db)
-            } else {
-                try entity.insert(db)
-            }
-        }
-    }
-
-    public func fetch<T: GRDBEntityType>(for key: String, nameSpace _: String) throws -> T? {
-        return try dbQueue.inDatabase { db in
-            let result = try T.filter(key == key).fetchOne(db)
-            return result
-        }
-    }
-
-    public func delete<T: GRDBEntityType>(_ entity: T, for _: String) throws {
-        return try dbQueue.inDatabase { db in
-            try entity.delete(db)
-        }
     }
 }

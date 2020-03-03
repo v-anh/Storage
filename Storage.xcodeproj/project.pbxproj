@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		661DE306240CF35100C64C4F /* ZADStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661DE305240CF35100C64C4F /* ZADStore.swift */; };
+		661DE306240CF35100C64C4F /* ZADStoreType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661DE305240CF35100C64C4F /* ZADStoreType.swift */; };
 		66684AE6240768130026DBA5 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66684ADC240768130026DBA5 /* Storage.framework */; };
 		66684AEB240768130026DBA5 /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684AEA240768130026DBA5 /* StorageTests.swift */; };
 		66684AED240768130026DBA5 /* Storage.h in Headers */ = {isa = PBXBuildFile; fileRef = 66684ADF240768130026DBA5 /* Storage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -16,6 +16,10 @@
 		66684C2F240776380026DBA5 /* GRDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 66684C24240776090026DBA5 /* GRDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		66684C832407CED00026DBA5 /* StorageErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684C822407CED00026DBA5 /* StorageErrors.swift */; };
 		66684C862407CFF60026DBA5 /* GRDBContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684C852407CFF60026DBA5 /* GRDBContext.swift */; };
+		66894B29240E724200B29491 /* FeedStorageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66894B28240E724200B29491 /* FeedStorageType.swift */; };
+		66894B33240E72E700B29491 /* BusinessModel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66894B30240E72A400B29491 /* BusinessModel.framework */; };
+		66894B34240E72E700B29491 /* BusinessModel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 66894B30240E72A400B29491 /* BusinessModel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		66894B36240E731000B29491 /* AddressStoreType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66894B35240E731000B29491 /* AddressStoreType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +44,20 @@
 			remoteGlobalIDString = 56E5D7D31B4D3FEE00430942;
 			remoteInfo = GRDBiOSTests;
 		};
+		66894B2F240E72A400B29491 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66894B2A240E72A300B29491 /* BusinessModel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2DC3800C2355AB050097E0E3;
+			remoteInfo = BusinessModel;
+		};
+		66894B31240E72A400B29491 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66894B2A240E72A300B29491 /* BusinessModel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2DDE56EE2375208A0003A83A;
+			remoteInfo = BusinessModelTests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,6 +67,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				66894B34240E72E700B29491 /* BusinessModel.framework in Embed Frameworks */,
 				66684C2F240776380026DBA5 /* GRDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -57,7 +76,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		661DE305240CF35100C64C4F /* ZADStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZADStore.swift; sourceTree = "<group>"; };
+		661DE305240CF35100C64C4F /* ZADStoreType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZADStoreType.swift; sourceTree = "<group>"; };
 		66684ADC240768130026DBA5 /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66684ADF240768130026DBA5 /* Storage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Storage.h; path = ../Storage.h; sourceTree = "<group>"; };
 		66684AE0240768130026DBA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
@@ -68,6 +87,9 @@
 		66684C12240776080026DBA5 /* GRDB.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GRDB.xcodeproj; path = "Storage/Vendors/GRDB.swift-4.10.0/GRDB.xcodeproj"; sourceTree = "<group>"; };
 		66684C822407CED00026DBA5 /* StorageErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageErrors.swift; sourceTree = "<group>"; };
 		66684C852407CFF60026DBA5 /* GRDBContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBContext.swift; sourceTree = "<group>"; };
+		66894B28240E724200B29491 /* FeedStorageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStorageType.swift; sourceTree = "<group>"; };
+		66894B2A240E72A300B29491 /* BusinessModel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BusinessModel.xcodeproj; path = Storage/Vendors/BusinessModel/BusinessModel.xcodeproj; sourceTree = "<group>"; };
+		66894B35240E731000B29491 /* AddressStoreType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressStoreType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66894B33240E72E700B29491 /* BusinessModel.framework in Frameworks */,
 				66684C2E240776380026DBA5 /* GRDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,7 +116,9 @@
 		661DE302240CF34100C64C4F /* Clients */ = {
 			isa = PBXGroup;
 			children = (
-				661DE305240CF35100C64C4F /* ZADStore.swift */,
+				661DE305240CF35100C64C4F /* ZADStoreType.swift */,
+				66894B28240E724200B29491 /* FeedStorageType.swift */,
+				66894B35240E731000B29491 /* AddressStoreType.swift */,
 			);
 			path = Clients;
 			sourceTree = "<group>";
@@ -101,6 +126,7 @@
 		66684AD2240768130026DBA5 = {
 			isa = PBXGroup;
 			children = (
+				66894B2A240E72A300B29491 /* BusinessModel.xcodeproj */,
 				66684C12240776080026DBA5 /* GRDB.xcodeproj */,
 				66684ADE240768130026DBA5 /* Storage */,
 				66684AE9240768130026DBA5 /* StorageTests */,
@@ -188,6 +214,15 @@
 			path = Contexts;
 			sourceTree = "<group>";
 		};
+		66894B2B240E72A300B29491 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66894B30240E72A400B29491 /* BusinessModel.framework */,
+				66894B32240E72A400B29491 /* BusinessModelTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -271,6 +306,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 66894B2B240E72A300B29491 /* Products */;
+					ProjectRef = 66894B2A240E72A300B29491 /* BusinessModel.xcodeproj */;
+				},
+				{
 					ProductGroup = 66684C13240776080026DBA5 /* Products */;
 					ProjectRef = 66684C12240776080026DBA5 /* GRDB.xcodeproj */;
 				},
@@ -298,6 +337,20 @@
 			remoteRef = 66684C25240776090026DBA5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		66894B30240E72A400B29491 /* BusinessModel.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = BusinessModel.framework;
+			remoteRef = 66894B2F240E72A400B29491 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		66894B32240E72A400B29491 /* BusinessModelTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = BusinessModelTests.xctest;
+			remoteRef = 66894B31240E72A400B29491 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -323,8 +376,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				66684C862407CFF60026DBA5 /* GRDBContext.swift in Sources */,
-				661DE306240CF35100C64C4F /* ZADStore.swift in Sources */,
+				661DE306240CF35100C64C4F /* ZADStoreType.swift in Sources */,
+				66894B36240E731000B29491 /* AddressStoreType.swift in Sources */,
 				66684AF72407683F0026DBA5 /* Storage.swift in Sources */,
+				66894B29240E724200B29491 /* FeedStorageType.swift in Sources */,
 				66684C832407CED00026DBA5 /* StorageErrors.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
