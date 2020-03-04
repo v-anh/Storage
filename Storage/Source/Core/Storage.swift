@@ -12,7 +12,7 @@ import GRDB
 public protocol ClientType {
     var zad: ZADStorageType { get }
     var feed: FeedStorageType { get }
-    var address: AddressStorageType { get }
+    var brand: BrandStoreType { get }
 }
 
 public typealias StorageType = ClientType

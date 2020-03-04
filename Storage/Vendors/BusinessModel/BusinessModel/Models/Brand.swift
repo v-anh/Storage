@@ -11,7 +11,7 @@ import Foundation
 // MARK: Brand Model
 
 @objcMembers
-public final class Brand: NSObject, Codable, AutoTestInitializer {
+public final class Brand: NSObject, Codable {
     public let brandId: String
     public let image: String
     public let keywords: String

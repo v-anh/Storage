@@ -12,9 +12,6 @@ import BusinessModel
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    ///
-    
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         do {
@@ -24,61 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print(error)
         }
         
-        do {
-            let zadObject1 = ZADObjectGRDB(id: 0, dataKey: "object1", object: Data(),locationName: "Singapore",language: "EN")
-            try StorageManager.shared.storageContext?.zad.save(zadObject1, for: "")
-            
-            let zadObject2 = ZADObjectGRDB(id: 0, dataKey: "object2", object: Data(),locationName: "VietNam",language: "VN")
-            try StorageManager.shared.storageContext?.zad.save(zadObject2, for: "")
-            
-            let zadObject3 = ZADObjectGRDB(id: 0, dataKey: "object3", object: Data(),locationName: "VietNam",language: "EN")
-            try StorageManager.shared.storageContext?.zad.save(zadObject3, for: "")
-            
-            let zadObject4 = ZADObjectGRDB(id: 0, dataKey: "object4", object: Data(),locationName: "VietNam",language: "VN")
-            try StorageManager.shared.storageContext?.zad.save(zadObject4, for: "")
-        }catch {
-            print(error)
-        }
-        
-        do {
-            let feedObj = FeedRGDB(id: 0, feedName: "Feed name", feedPosition: 10)
-            try StorageManager.shared.storageContext?.feed.save(feedObj, for: "SG")
-            
-            let feedObj1 = FeedRGDB(id: 0, feedName: "Feed name", feedPosition: 10)
-            try StorageManager.shared.storageContext?.feed.save(feedObj1, for: "SG")
-            
-            let feedObj2 = FeedRGDB(id: 0, feedName: "Feed name", feedPosition: 10)
-            try StorageManager.shared.storageContext?.feed.save(feedObj2, for: "SG")
-        }catch {
-            print(error)
-        }
-        
-        do {
-            let result = try StorageManager.shared.storageContext?.feed.getFeed("EN")
-            print(String(describing: result))
-        }catch {
-            print(error)
-        }
-        
-        do {
-            let result = try StorageManager.shared.storageContext?.zad.getZADByLanguage("EN")
-            print(String(describing: result))
-        }catch {
-            print(error)
-        }
-        
-        do {
-            try StorageManager.shared.storageContext?.zad.clearZADBy("VN")
-        }catch {
-            print(error)
-        }
-        
-        do {
-            let result = try StorageManager.shared.storageContext?.zad.getZADByLanguage("VN")
-            print(String(describing: result))
-        }catch {
-            print(error)
-        }
         return true
     }
     

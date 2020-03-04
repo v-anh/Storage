@@ -9,8 +9,6 @@
 Storage is an GRDB Database wrapper in Swift.
 
 
-## Content
-
 # Storage
 
 [![Platform](http://img.shields.io/badge/platform-ios-blue.svg?style=flat
@@ -18,18 +16,17 @@ Storage is an GRDB Database wrapper in Swift.
 [![Language](http://img.shields.io/badge/language-swift-brightgreen.svg?style=flat
 )](https://developer.apple.com/swift)
 
-Storage is an GRDB Database wrapper in Swift. It grants Bussiness Models with persistence and fetching methods.
+Storage is Database store module in swift that using GRDB as core. It grants Bussiness Models with persistence and fetching methods.
 
 
 ## Content
  - [Why GRDB?](#GRDB)
  - [How does it work?](#how-does-it-work)
+ - [Migration](#Migration)
+ - [Setup](#Setup)
  - [Usage](#usage)
- - [Installation](#installation)
- - [Example](#example)
- - [Installation](#installation)
- - [State of the project](#state-of-the-project)
- - [Contributing](#contribute)
+ - [Pros and Cons](#Pros-and-Cons)
+ - [Improvement](#Improvement)
 
 ## GRDB
 - GRDB provides raw access to SQL and advanced SQLite features: https://github.com/groue/GRDB.swift
@@ -41,10 +38,7 @@ Storage is an GRDB Database wrapper in Swift. It grants Bussiness Models with pe
 - Base on [Good Practices for Designing Record Types](https://github.com/groue/GRDB.swift/blob/master/Documentation/GoodPracticesForDesigningRecordTypes.md)
 
 
-## Usage
-Since we already has the FMDB in the previos version so we need to support the migration -> Idealy we will have somekind of adapter to fetch the old ZAD format model from the the current .sql then store in the new format.
-
- ## Migration
+```## Migration
 
   Migration is required to difine the name, type of column in table
 
@@ -61,6 +55,30 @@ Since we already has the FMDB in the previos version so we need to support the m
         return migrator
     }
  ```
+
+## Setup
+```swift
+    do {
+            let grdbContext = try GRDBContext(in: application)
+            StorageManager.setup(storageContext: grdbContext)
+        }catch {
+            print(error)
+    }
+```
+
+- Request data
+```swift
+    do {
+            let address = Address(...)
+            try StorageManager.shared.storageContext?.address.save(address, for: "SG")
+        }catch {
+            print(error)
+    }
+```
+
+## Usage
+Since we already has the FMDB in the previos version so we need to support the migration -> Idealy we will have somekind of adapter to fetch the old ZAD format model from the the current .sql then store in the new format.
+
 - Define Data Object
 
  To store the Business Model like `Address`,  make it adopt `GRDBEntityType` protocol
@@ -138,36 +156,17 @@ extension GRDBContext: AddressStorageType {
 }
 ```
 
-- Setup StorageManager
-```swift
-    do {
-            let grdbContext = try GRDBContext(in: application)
-            StorageManager.setup(storageContext: grdbContext)
-        }catch {
-            print(error)
-    }
-```
-
-- Request data
-```swift
-    do {
-            let address = Address(...)
-            try StorageManager.shared.storageContext?.address.save(address, for: "SG")
-        }catch {
-            print(error)
-    }
-```
-
-
 ## Pros and Cons
 - Pros: 
     + Flexible with query interface, it lets you write pure Swift instead of SQL
     + Support Migration
     + Support encryption with [SQLCipher](https://github.com/groue/GRDB.swift/blob/master/README.md#encryption)
     + Resued the Business Model
-    + 
+ - Cons: 
+    + Manual define table & column in Migration
+    + Need to define the query function for each type of Model instead of generic one 
 
-## [State of the project]
+## Improvement
 - How to deal with ZAD object? 
 - How to deal with Objective-C?
 

@@ -20,7 +20,7 @@
 		66894B29240E724200B29491 /* FeedStorageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66894B28240E724200B29491 /* FeedStorageType.swift */; };
 		66894B33240E72E700B29491 /* BusinessModel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66894B30240E72A400B29491 /* BusinessModel.framework */; };
 		66894B34240E72E700B29491 /* BusinessModel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 66894B30240E72A400B29491 /* BusinessModel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		66894B36240E731000B29491 /* AddressStoreType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66894B35240E731000B29491 /* AddressStoreType.swift */; };
+		66894B36240E731000B29491 /* BrandStoreType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66894B35240E731000B29491 /* BrandStoreType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,7 +91,7 @@
 		66684C852407CFF60026DBA5 /* GRDBContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBContext.swift; sourceTree = "<group>"; };
 		66894B28240E724200B29491 /* FeedStorageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStorageType.swift; sourceTree = "<group>"; };
 		66894B2A240E72A300B29491 /* BusinessModel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BusinessModel.xcodeproj; path = Storage/Vendors/BusinessModel/BusinessModel.xcodeproj; sourceTree = "<group>"; };
-		66894B35240E731000B29491 /* AddressStoreType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressStoreType.swift; sourceTree = "<group>"; };
+		66894B35240E731000B29491 /* BrandStoreType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandStoreType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,7 +120,7 @@
 			children = (
 				661DE305240CF35100C64C4F /* ZADStoreType.swift */,
 				66894B28240E724200B29491 /* FeedStorageType.swift */,
-				66894B35240E731000B29491 /* AddressStoreType.swift */,
+				66894B35240E731000B29491 /* BrandStoreType.swift */,
 			);
 			path = Clients;
 			sourceTree = "<group>";
@@ -381,7 +381,7 @@
 				66684C862407CFF60026DBA5 /* GRDBContext.swift in Sources */,
 				661DE306240CF35100C64C4F /* ZADStoreType.swift in Sources */,
 				66566CF1240F99B100CA32F3 /* StorageConfiguration.swift in Sources */,
-				66894B36240E731000B29491 /* AddressStoreType.swift in Sources */,
+				66894B36240E731000B29491 /* BrandStoreType.swift in Sources */,
 				66684AF72407683F0026DBA5 /* Storage.swift in Sources */,
 				66894B29240E724200B29491 /* FeedStorageType.swift in Sources */,
 				66684C832407CED00026DBA5 /* StorageErrors.swift in Sources */,

@@ -18,7 +18,7 @@ public final class GRDBContext: StorageType {
     
     public var zad: ZADStorageType { return self }
     public var feed: FeedStorageType { return self }
-    public var address: AddressStorageType { return self }
+    public var brand: BrandStoreType { return self }
     
     var dbQueue: DatabaseQueue
 
@@ -53,6 +53,13 @@ extension GRDBContext {
                 tableDefinition.autoIncrementedPrimaryKey("id")
                 tableDefinition.column("feedName", .text)
                 tableDefinition.column("feedPosition", .text)
+            }
+            
+            try database.create(table: "brand") { tableDefinition in
+                tableDefinition.column("brandId", .text).primaryKey()
+                tableDefinition.column("image", .text)
+                tableDefinition.column("keywords", .text)
+                tableDefinition.column("name", .text)
             }
         }
         return migrator
