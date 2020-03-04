@@ -16,7 +16,7 @@ public struct ZADObjectGRDB: Codable, GRDBEntityType {
     public var language:String
     public var object:Data
 
-    public init(id:Int64, dataKey: String, object: Data,locationName: String,language: String) {
+    public init(id:Int64, dataKey: String, object: Data, locationName: String, language: String) {
         self.dataKey = dataKey
         self.object = object
         self.locationName = locationName

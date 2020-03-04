@@ -18,7 +18,7 @@ Storage is an GRDB Database wrapper in Swift.
 [![Language](http://img.shields.io/badge/language-swift-brightgreen.svg?style=flat
 )](https://developer.apple.com/swift)
 
-Storage is an GRDB Database wrapper in Swift.
+Storage is an GRDB Database wrapper in Swift. It grants Bussiness Models with persistence and fetching methods.
 
 
 ## Content
@@ -42,10 +42,13 @@ Storage is an GRDB Database wrapper in Swift.
 
 
 ## Usage
+Since we already has the FMDB in the previos version so we need to support the migration -> Idealy we will have somekind of adapter to fetch the old ZAD format model from the the current .sql then store in the new format.
 
-Before insert or fetching record from Database, Migration is required to difine the name, type of column in table
- - Migration
-    ```swift
+ ## Migration
+
+  Migration is required to difine the name, type of column in table
+
+```swift
     internal class var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("Zalora-v1") { database in
@@ -57,61 +60,83 @@ Before insert or fetching record from Database, Migration is required to difine 
         }
         return migrator
     }
-    ```
+ ```
 - Define Data Object
- 
- 
- ```swift
-public struct ZADObjectRGDB:Codable, GRDBEntityType {
-    public var id:Int64
-    public var dataKey:String
-    public var objects:Data
-    
-    public init(id:Int64, dataKey: String, object: Data) {
-        self.id = id
-        self.dataKey = dataKey
-        self.objects = object
-    }
-    
-    //Define database table name
-    public static var databaseTableName: String {
-        return "ZADObjectRGDB"
-    }
-    
-    // Define database columns from CodingKeys
-    enum Columns {
-        static let id = Column(CodingKeys.id)
-        static let dataKey = Column(CodingKeys.dataKey)
-        static let objects = Column(CodingKeys.objects)
-    }
-}
-```
 
-- Make query interface
+ To store the Business Model like `Address`,  make it adopt `GRDBEntityType` protocol
+
+ Note: We need to create the table for each Business Model in the  [Migration](#Migration)
+
 ```swift
-public protocol ZADStorageType {
-    func save(_ entity: ZADObjectRGDB, for nameSpace: String) throws
-    func get(for key:String, nameSpace: String) throws -> ZADObjectRGDB?
-}
+import GRDB
+import BusinessModel
 
-extension GRDBContext: ZADStorageType {
-    public func save(_ entity: ZADObjectRGDB, for nameSpace: String) throws {
-        try self.createOrUpdate(entity, for: nameSpace)
+extension Address: GRDBEntityType {}
+
+extension GRDBContext: AddressStorageType {
+    public func save(_ entity: Address, for nameSpace: String) throws {
+        try dbQueue.inDatabase({ db in
+            try entity.insert(db)
+        })
+    }
+
+    public func getZADByLanguage(_ language: String) throws -> [Address]? {
+        let zadByLanguage = Address.filter(Column("language") == language)
+        return try dbQueue.inDatabase { db in
+            try zadByLanguage.fetchAll(db)
+        }
     }
     
-    public func get(for key:String, nameSpace: String) throws -> ZADObjectRGDB? {
-        return try fetch(for: key, nameSpace: nameSpace)
+    public func clearAddressBy(_ language: String) throws  {
+        try dbQueue.inDatabase { db in
+            _ = try Address.filter(Column("language") == language).deleteAll(db)
+        }
     }
 }
 ```
 
-- Define Client 
+- Provide the client interface
+```swift
+public protocol AddressStorageType {
+    func save(_ entity: Address, for nameSpace: String) throws
+    func getZADByLanguage(_ language: String) throws -> [Address]?
+    func clearZADBy(_ language: String) throws
+}
+```
+
+- Define Client in `GRDBContext `
 ```swift
 public protocol ClientType {
-    var zad: ZADStorageType { get }
+    var address: AddressStorageType { get }
 }
 ```
 
+- `GRDB is not a managed ORM and GRDB can't provide implicit isolation: the application must decide when it wants to safely read information in the database, and this decision is made explicit` 
+
+It may better to define the query interface depend on the Model type itself with simple rule: consumed data must come from a single database access method
+
+```swift
+extension GRDBContext: AddressStorageType {
+    public func save(_ entity: Address, for nameSpace: String) throws {
+        try dbQueue.inDatabase({ db in
+            try entity.insert(db)
+        })
+    }
+
+    public func getZADByLanguage(_ language: String) throws -> [Address]? {
+        let zadByLanguage = Address.filter(Column("language") == language)
+        return try dbQueue.inDatabase { db in
+            try zadByLanguage.fetchAll(db)
+        }
+    }
+    
+    public func clearAddressBy(_ language: String) throws  {
+        try dbQueue.inDatabase { db in
+            _ = try Address.filter(Column("language") == language).deleteAll(db)
+        }
+    }
+}
+```
 
 - Setup StorageManager
 ```swift
@@ -126,10 +151,23 @@ public protocol ClientType {
 - Request data
 ```swift
     do {
-        let zadObject = ZADObjectRGDB(id: 0, dataKey: "newkey", object: Data())
-            try StorageManager.shared.storageContext?.zad.save(zadObject, for: "SG")
+            let address = Address(...)
+            try StorageManager.shared.storageContext?.address.save(address, for: "SG")
         }catch {
             print(error)
     }
 ```
+
+
+## Pros and Cons
+- Pros: 
+    + Flexible with query interface, it lets you write pure Swift instead of SQL
+    + Support Migration
+    + Support encryption with [SQLCipher](https://github.com/groue/GRDB.swift/blob/master/README.md#encryption)
+    + Resued the Business Model
+    + 
+
+## [State of the project]
+- How to deal with ZAD object? 
+- How to deal with Objective-C?
 

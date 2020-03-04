@@ -8,6 +8,7 @@
 
 import UIKit
 import Storage
+import BusinessModel
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         do {
-            let grdbContext = try GRDBContext(in: application)
+            let grdbContext = try GRDBContext(in: application, databaseName: "db", trace: { print($0) })
             StorageManager.setup(storageContext: grdbContext)
         }catch {
             print(error)

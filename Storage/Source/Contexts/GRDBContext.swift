@@ -22,13 +22,13 @@ public final class GRDBContext: StorageType {
     
     var dbQueue: DatabaseQueue
 
-    public init(in application: UIApplication) throws {
+    public init(in application: UIApplication, databaseName: String, trace: ((String) -> Void)? = nil) throws {
         let databaseURL = try FileManager.default
             .url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            .appendingPathComponent("db.sqlite")
+            .appendingPathComponent("\(databaseName).sql")
 
         var grdbConfig = Configuration()
-        grdbConfig.trace = { print($0) }
+        grdbConfig.trace = trace
 
         dbQueue = try DatabaseQueue(path: databaseURL.path)
         try GRDBContext.migrator.migrate(dbQueue)

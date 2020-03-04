@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		661DE306240CF35100C64C4F /* ZADStoreType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661DE305240CF35100C64C4F /* ZADStoreType.swift */; };
+		66566CF1240F99B100CA32F3 /* StorageConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66566CF0240F99B100CA32F3 /* StorageConfiguration.swift */; };
 		66684AE6240768130026DBA5 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66684ADC240768130026DBA5 /* Storage.framework */; };
 		66684AEB240768130026DBA5 /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684AEA240768130026DBA5 /* StorageTests.swift */; };
 		66684AED240768130026DBA5 /* Storage.h in Headers */ = {isa = PBXBuildFile; fileRef = 66684ADF240768130026DBA5 /* Storage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -77,6 +78,7 @@
 
 /* Begin PBXFileReference section */
 		661DE305240CF35100C64C4F /* ZADStoreType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZADStoreType.swift; sourceTree = "<group>"; };
+		66566CF0240F99B100CA32F3 /* StorageConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageConfiguration.swift; sourceTree = "<group>"; };
 		66684ADC240768130026DBA5 /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66684ADF240768130026DBA5 /* Storage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Storage.h; path = ../Storage.h; sourceTree = "<group>"; };
 		66684AE0240768130026DBA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 			children = (
 				66684AF62407683F0026DBA5 /* Storage.swift */,
 				66684C822407CED00026DBA5 /* StorageErrors.swift */,
+				66566CF0240F99B100CA32F3 /* StorageConfiguration.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 			files = (
 				66684C862407CFF60026DBA5 /* GRDBContext.swift in Sources */,
 				661DE306240CF35100C64C4F /* ZADStoreType.swift in Sources */,
+				66566CF1240F99B100CA32F3 /* StorageConfiguration.swift in Sources */,
 				66894B36240E731000B29491 /* AddressStoreType.swift in Sources */,
 				66684AF72407683F0026DBA5 /* Storage.swift in Sources */,
 				66894B29240E724200B29491 /* FeedStorageType.swift in Sources */,

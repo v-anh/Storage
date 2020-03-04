@@ -10,9 +10,7 @@ import Foundation
 import GRDB
 import BusinessModel
 
-extension Address: GRDBEntityType {
-}
-
+extension Address: GRDBEntityType {}
 
 public protocol AddressStorageType {
     func save(_ entity: Address, for nameSpace: String) throws

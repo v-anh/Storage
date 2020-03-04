@@ -14,14 +14,9 @@ public protocol ClientType {
     var feed: FeedStorageType { get }
     var address: AddressStorageType { get }
 }
+
 public typealias StorageType = ClientType
 
-public struct StorageConfiguration {
-    public let path: String
-    public init(_ path: String) {
-        self.path = path
-    }
-}
 
 public class StorageManager {
     // MARK: - Public properties
@@ -32,17 +27,13 @@ public class StorageManager {
         shared.storageContext = storageContext
     }
     
-    // MARK: - Private properties
-    
     public var storageContext: StorageType?
+    
+    private func databaseUrl(_ databaseName: String) throws ->  URL {
+        return try FileManager.default
+            .url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            .appendingPathComponent(databaseName)
+    }
+
 }
 
-public struct SortDescriptor {
-    let key: String
-    let ascending: Bool
-    
-    public init(key: String, ascending: Bool = true) {
-        self.key = key
-        self.ascending = ascending
-    }
-}
