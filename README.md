@@ -6,16 +6,6 @@
 [![Language](http://img.shields.io/badge/language-swift-brightgreen.svg?style=flat
 )](https://developer.apple.com/swift)
 
-Storage is an GRDB Database wrapper in Swift.
-
-
-# Storage
-
-[![Platform](http://img.shields.io/badge/platform-ios-blue.svg?style=flat
-)](https://developer.apple.com/iphone/index.action)
-[![Language](http://img.shields.io/badge/language-swift-brightgreen.svg?style=flat
-)](https://developer.apple.com/swift)
-
 Storage is Database store module in swift that using GRDB as core. It grants Bussiness Models with persistence and fetching methods.
 
 
