@@ -1,4 +1,3 @@
-
 # Storage
 
 [![Platform](http://img.shields.io/badge/platform-ios-blue.svg?style=flat
@@ -6,7 +5,7 @@
 [![Language](http://img.shields.io/badge/language-swift-brightgreen.svg?style=flat
 )](https://developer.apple.com/swift)
 
-Storage is Database store module in swift that using GRDB as core. It grants Bussiness Models with persistence and fetching methods.
+Storage is the Database store module in swift that using GRDB as the core. It grants Bussiness Models with persistence and fetching methods.
 
 
 ## Content
@@ -14,20 +13,21 @@ Storage is Database store module in swift that using GRDB as core. It grants Bus
  - [Migration](#Migration)
  - [Setup](#Setup)
  - [Usage](#usage)
+ - [Sample Project](#Sample-Project)
  - [Pros and Cons](#Pros-and-Cons)
  - [Improvement](#Improvement)
 
 ## GRDB
 - GRDB provides raw access to SQL and advanced SQLite features: https://github.com/groue/GRDB.swift
 
-- GRDB runs on top of SQLite so we could able to migrate with the current database that also base on SQL  
+- GRDB runs on top of SQLite so we could able to migrate with the current database that also bases on SQL  
 
 - Base on [Good Practices for Designing Record Types](https://github.com/groue/GRDB.swift/blob/master/Documentation/GoodPracticesForDesigningRecordTypes.md)
 
 
 ## Migration
 
-Migration is required to difine the name, type of column in table
+Migration is required to define the name, type of column in table
 
 ```swift
     internal class var migrator: DatabaseMigrator {
@@ -53,7 +53,7 @@ Migration is required to difine the name, type of column in table
     }
 ```
 
-- Request data
+- Making request
 ```swift
     do {
             let address = Address(...)
@@ -64,7 +64,7 @@ Migration is required to difine the name, type of column in table
 ```
 
 ## Usage
-Since we already has the FMDB in the previos version so we need to support the migration -> Idealy we will have somekind of adapter to fetch the old ZAD format model from the the current .sql then store in the new format.
+Since we already have the FMDB in the previous version so we need to support the migration -> Ideally we will have some kind of adapter to fetch the old ZAD format model from the current .sql then store in the new format.
 
 - Define Data Object
 
@@ -100,7 +100,8 @@ extension GRDBContext: AddressStorageType {
 }
 ```
 
-- Provide the client interface
+- In order to make appropriate persist to the database, we should call through specific StorageType. The AddressStorageType is an example
+ 
 ```swift
 public protocol AddressStorageType {
     func save(_ entity: Address, for nameSpace: String) throws
@@ -116,9 +117,9 @@ public protocol ClientType {
 }
 ```
 
-- `GRDB is not a managed ORM and GRDB can't provide implicit isolation: the application must decide when it wants to safely read information in the database, and this decision is made explicit` 
+- `GRDB is not a managed ORM and GRDB can't provide implicit isolation: the application must decide when it wants to safely read the information in the database, and this decision is made explicit` 
 
-It may better to define the query interface depend on the Model type itself with simple rule: consumed data must come from a single database access method
+It may better to define the query interface depend on the Model type itself with a simple rule: consumed data must come from a single database access method
 
 ```swift
 extension GRDBContext: AddressStorageType {
@@ -142,6 +143,11 @@ extension GRDBContext: AddressStorageType {
     }
 }
 ```
+
+## Sample Project
+- In the Sample project included in the repo: I made simple add and delete brand that uses the Storage
+
+- In the Storage that is injected the Business model (Brand), so just make the query interface for the Brand. For instance, are `addBrand` and `deleteBrandById`
 
 ## Pros and Cons
 - Pros: 
