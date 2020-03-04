@@ -9,8 +9,6 @@
 Storage is an GRDB Database wrapper in Swift.
 
 
-## Content
-
 # Storage
 
 [![Platform](http://img.shields.io/badge/platform-ios-blue.svg?style=flat
@@ -18,18 +16,17 @@ Storage is an GRDB Database wrapper in Swift.
 [![Language](http://img.shields.io/badge/language-swift-brightgreen.svg?style=flat
 )](https://developer.apple.com/swift)
 
-Storage is an GRDB Database wrapper in Swift.
+Storage is Database store module in swift that using GRDB as core. It grants Bussiness Models with persistence and fetching methods.
 
 
 ## Content
  - [Why GRDB?](#GRDB)
  - [How does it work?](#how-does-it-work)
+ - [Migration](#Migration)
+ - [Setup](#Setup)
  - [Usage](#usage)
- - [Installation](#installation)
- - [Example](#example)
- - [Installation](#installation)
- - [State of the project](#state-of-the-project)
- - [Contributing](#contribute)
+ - [Pros and Cons](#Pros-and-Cons)
+ - [Improvement](#Improvement)
 
 ## GRDB
 - GRDB provides raw access to SQL and advanced SQLite features: https://github.com/groue/GRDB.swift
@@ -41,11 +38,11 @@ Storage is an GRDB Database wrapper in Swift.
 - Base on [Good Practices for Designing Record Types](https://github.com/groue/GRDB.swift/blob/master/Documentation/GoodPracticesForDesigningRecordTypes.md)
 
 
-## Usage
+```## Migration
 
-Before insert or fetching record from Database, Migration is required to difine the name, type of column in table
- - Migration
-    ```swift
+  Migration is required to difine the name, type of column in table
+
+```swift
     internal class var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("Zalora-v1") { database in
@@ -57,63 +54,9 @@ Before insert or fetching record from Database, Migration is required to difine 
         }
         return migrator
     }
-    ```
-- Define Data Object
- 
- 
- ```swift
-public struct ZADObjectRGDB:Codable, GRDBEntityType {
-    public var id:Int64
-    public var dataKey:String
-    public var objects:Data
-    
-    public init(id:Int64, dataKey: String, object: Data) {
-        self.id = id
-        self.dataKey = dataKey
-        self.objects = object
-    }
-    
-    //Define database table name
-    public static var databaseTableName: String {
-        return "ZADObjectRGDB"
-    }
-    
-    // Define database columns from CodingKeys
-    enum Columns {
-        static let id = Column(CodingKeys.id)
-        static let dataKey = Column(CodingKeys.dataKey)
-        static let objects = Column(CodingKeys.objects)
-    }
-}
-```
+ ```
 
-- Make query interface
-```swift
-public protocol ZADStorageType {
-    func save(_ entity: ZADObjectRGDB, for nameSpace: String) throws
-    func get(for key:String, nameSpace: String) throws -> ZADObjectRGDB?
-}
-
-extension GRDBContext: ZADStorageType {
-    public func save(_ entity: ZADObjectRGDB, for nameSpace: String) throws {
-        try self.createOrUpdate(entity, for: nameSpace)
-    }
-    
-    public func get(for key:String, nameSpace: String) throws -> ZADObjectRGDB? {
-        return try fetch(for: key, nameSpace: nameSpace)
-    }
-}
-```
-
-- Define Client 
-```swift
-public protocol ClientType {
-    var zad: ZADStorageType { get }
-}
-```
-
-
-- Setup StorageManager
+## Setup
 ```swift
     do {
             let grdbContext = try GRDBContext(in: application)
@@ -126,14 +69,104 @@ public protocol ClientType {
 - Request data
 ```swift
     do {
-        let zadObject = ZADObjectRGDB(id: 0, dataKey: "newkey", object: Data())
-            try StorageManager.shared.storageContext?.zad.save(zadObject, for: "SG")
+            let address = Address(...)
+            try StorageManager.shared.storageContext?.address.save(address, for: "SG")
         }catch {
             print(error)
     }
 ```
-## State of the project
-- Sync between Storage Entity with Main App Entity. There are still dependencies between the Main App and Storagle:
- + Storage Entity need confirm with `GRDBEntityType` that is part of the GRDB, so if it is exposed to the Main App, then Main
-App depend in GRDB -> that may go against the abstraction purpose
- + A function that covert the Main App Entity to the Storage Entity will resolve dependency issue?
+
+## Usage
+Since we already has the FMDB in the previos version so we need to support the migration -> Idealy we will have somekind of adapter to fetch the old ZAD format model from the the current .sql then store in the new format.
+
+- Define Data Object
+
+ To store the Business Model like `Address`,  make it adopt `GRDBEntityType` protocol
+
+ Note: We need to create the table for each Business Model in the  [Migration](#Migration)
+
+```swift
+import GRDB
+import BusinessModel
+
+extension Address: GRDBEntityType {}
+
+extension GRDBContext: AddressStorageType {
+    public func save(_ entity: Address, for nameSpace: String) throws {
+        try dbQueue.inDatabase({ db in
+            try entity.insert(db)
+        })
+    }
+
+    public func getZADByLanguage(_ language: String) throws -> [Address]? {
+        let zadByLanguage = Address.filter(Column("language") == language)
+        return try dbQueue.inDatabase { db in
+            try zadByLanguage.fetchAll(db)
+        }
+    }
+    
+    public func clearAddressBy(_ language: String) throws  {
+        try dbQueue.inDatabase { db in
+            _ = try Address.filter(Column("language") == language).deleteAll(db)
+        }
+    }
+}
+```
+
+- Provide the client interface
+```swift
+public protocol AddressStorageType {
+    func save(_ entity: Address, for nameSpace: String) throws
+    func getZADByLanguage(_ language: String) throws -> [Address]?
+    func clearZADBy(_ language: String) throws
+}
+```
+
+- Define Client in `GRDBContext `
+```swift
+public protocol ClientType {
+    var address: AddressStorageType { get }
+}
+```
+
+- `GRDB is not a managed ORM and GRDB can't provide implicit isolation: the application must decide when it wants to safely read information in the database, and this decision is made explicit` 
+
+It may better to define the query interface depend on the Model type itself with simple rule: consumed data must come from a single database access method
+
+```swift
+extension GRDBContext: AddressStorageType {
+    public func save(_ entity: Address, for nameSpace: String) throws {
+        try dbQueue.inDatabase({ db in
+            try entity.insert(db)
+        })
+    }
+
+    public func getZADByLanguage(_ language: String) throws -> [Address]? {
+        let zadByLanguage = Address.filter(Column("language") == language)
+        return try dbQueue.inDatabase { db in
+            try zadByLanguage.fetchAll(db)
+        }
+    }
+    
+    public func clearAddressBy(_ language: String) throws  {
+        try dbQueue.inDatabase { db in
+            _ = try Address.filter(Column("language") == language).deleteAll(db)
+        }
+    }
+}
+```
+
+## Pros and Cons
+- Pros: 
+    + Flexible with query interface, it lets you write pure Swift instead of SQL
+    + Support Migration
+    + Support encryption with [SQLCipher](https://github.com/groue/GRDB.swift/blob/master/README.md#encryption)
+    + Resued the Business Model
+ - Cons: 
+    + Manual define table & column in Migration
+    + Need to define the query function for each type of Model instead of generic one 
+
+## Improvement
+- How to deal with ZAD object? 
+- How to deal with Objective-C?
+

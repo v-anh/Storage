@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "BrandListViewModel.delete(index:):BrandListViewModel.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.brandRows">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "GRDBContext.init(in:):GRDBContext.swift">
          <PersistentStrings>
             <PersistentString

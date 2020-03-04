@@ -11,43 +11,29 @@ import GRDB
 
 public protocol ClientType {
     var zad: ZADStorageType { get }
+    var feed: FeedStorageType { get }
+    var brand: BrandStoreType { get }
 }
 
-public protocol GRDBType {
-    static var migrator: DatabaseMigrator { get }
-    func createOrUpdate<T:GRDBEntityType>(_ entity: T, for nameSpace: String) throws
-    func fetch<T:GRDBEntityType>(for key:String, nameSpace: String) throws -> T?
-    func delete<T:GRDBEntityType>(_ entity: T, for nameSpace: String) throws
-}
+public typealias StorageType = ClientType
 
-public typealias GRDBEntityType = FetchableRecord & PersistableRecord
-public typealias StorageType = ClientType & GRDBType
-
-public struct StorageConfiguration {
-    public let path: String
-    public init(_ path:String){
-        self.path = path
-    }
-}
 
 public class StorageManager {
     // MARK: - Public properties
+    
     public static var shared = StorageManager()
     
     public static func setup(storageContext: StorageType) {
         shared.storageContext = storageContext
     }
     
-    // MARK: - Private properties
     public var storageContext: StorageType?
-}
-
-public struct SortDescriptor {
-    let key: String
-    let ascending: Bool
-
-    public init(key: String, ascending: Bool = true) {
-        self.key = key
-        self.ascending = ascending
+    
+    private func databaseUrl(_ databaseName: String) throws ->  URL {
+        return try FileManager.default
+            .url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            .appendingPathComponent(databaseName)
     }
+
 }
+

@@ -10,18 +10,26 @@ import Foundation
 import GRDB
 import UIKit
 
+public typealias GRDBEntityType = FetchableRecord & PersistableRecord
+
+
 public final class GRDBContext: StorageType {
-    private var dbQueue : DatabaseQueue
-    public var zad: ZADStorageType { return self }
     
-    public init(in application: UIApplication) throws {
+    
+    public var zad: ZADStorageType { return self }
+    public var feed: FeedStorageType { return self }
+    public var brand: BrandStoreType { return self }
+    
+    var dbQueue: DatabaseQueue
+
+    public init(in application: UIApplication, databaseName: String, trace: ((String) -> Void)? = nil) throws {
         let databaseURL = try FileManager.default
             .url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            .appendingPathComponent("db.sqlite")
-        
+            .appendingPathComponent("\(databaseName).sql")
+
         var grdbConfig = Configuration()
-        grdbConfig.trace = { print($0) }
-        
+        grdbConfig.trace = trace
+
         dbQueue = try DatabaseQueue(path: databaseURL.path)
         try GRDBContext.migrator.migrate(dbQueue)
         dbQueue.setupMemoryManagement(in: application)
@@ -33,39 +41,27 @@ extension GRDBContext {
         var migrator = DatabaseMigrator()
         migrator.eraseDatabaseOnSchemaChange = true
         migrator.registerMigration("Zalora-v1") { database in
-            try database.create(table: ZADObjectRGDB.databaseTableName) { tableDefinition in
-                tableDefinition.column("id",.integer).primaryKey()
-                tableDefinition.column("dataKey",.text)
-                tableDefinition.column("object",.blob)
+            try database.create(table: "zadObjectGRDB") { tableDefinition in
+                tableDefinition.column("id", .integer).primaryKey()
+                tableDefinition.column("dataKey", .text)
+                tableDefinition.column("locationName", .text)
+                tableDefinition.column("language", .text)
+                tableDefinition.column("object", .blob)
+            }
+            
+            try database.create(table: "feedRGDB") { tableDefinition in
+                tableDefinition.autoIncrementedPrimaryKey("id")
+                tableDefinition.column("feedName", .text)
+                tableDefinition.column("feedPosition", .text)
+            }
+            
+            try database.create(table: "brand") { tableDefinition in
+                tableDefinition.column("brandId", .text).primaryKey()
+                tableDefinition.column("image", .text)
+                tableDefinition.column("keywords", .text)
+                tableDefinition.column("name", .text)
             }
         }
         return migrator
-    }
-}
-
-extension GRDBContext {
-    public func createOrUpdate<T:GRDBEntityType>(_ entity: T, for nameSpace: String) throws {
-           try dbQueue.inDatabase { db in
-               if try entity.exists(db) {
-                   try entity.update(db)
-               }else {
-                   try entity.insert(db)
-               }
-           }
-       }
-    
-    
-    public func fetch<T:GRDBEntityType>(for key:String, nameSpace: String) throws -> T? {
-      return try dbQueue.inDatabase { db in
-          let result = try T.filter(key == key).fetchOne(db)
-          return result
-        }
-        
-    }
-    
-    public func delete<T:GRDBEntityType>(_ entity: T, for nameSpace: String) throws {
-        return try dbQueue.inDatabase { db in
-            try entity.delete(db)
-        }
     }
 }
