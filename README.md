@@ -28,9 +28,9 @@ Storage is Database store module in swift that using GRDB as core. It grants Bus
 - Base on [Good Practices for Designing Record Types](https://github.com/groue/GRDB.swift/blob/master/Documentation/GoodPracticesForDesigningRecordTypes.md)
 
 
-```## Migration
+## Migration
 
-  Migration is required to difine the name, type of column in table
+Migration is required to difine the name, type of column in table
 
 ```swift
     internal class var migrator: DatabaseMigrator {
