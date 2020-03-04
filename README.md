@@ -11,7 +11,6 @@ Storage is Database store module in swift that using GRDB as core. It grants Bus
 
 ## Content
  - [Why GRDB?](#GRDB)
- - [How does it work?](#how-does-it-work)
  - [Migration](#Migration)
  - [Setup](#Setup)
  - [Usage](#usage)
@@ -22,8 +21,6 @@ Storage is Database store module in swift that using GRDB as core. It grants Bus
 - GRDB provides raw access to SQL and advanced SQLite features: https://github.com/groue/GRDB.swift
 
 - GRDB runs on top of SQLite so we could be able to migrate with the current database that also base on SQL  
-
-## How does it work?
 
 - Base on [Good Practices for Designing Record Types](https://github.com/groue/GRDB.swift/blob/master/Documentation/GoodPracticesForDesigningRecordTypes.md)
 
