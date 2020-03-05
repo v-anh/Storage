@@ -27,7 +27,7 @@ public final class GRDBContext: StorageType {
         var grdbConfig = Configuration()
         grdbConfig.trace = trace
 
-        dbQueue = try DatabaseQueue(path: databaseURL.path)
+        dbQueue = try DatabaseQueue(path: databaseURL.path,configuration: grdbConfig)
         try GRDBContext.migrator.migrate(dbQueue)
         dbQueue.setupMemoryManagement(in: application)
     }

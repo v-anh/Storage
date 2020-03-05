@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         do {
             let grdbContext = try GRDBContext(in: application, databaseName: "db", trace: { print($0) })
-            StorageManager.setup(storageContext: grdbContext)
+            StorageManager.setup(storageContext: grdbContext) //.type
         }catch {
             print(error)
         }
