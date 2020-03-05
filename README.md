@@ -48,7 +48,7 @@ Migration is required to define the name, type of column in table
     do {
             let grdbContext = try GRDBContext(in: application)
             StorageManager.setup(storageContext: grdbContext)
-        }catch {
+        } catch {
             print(error)
     }
 ```
@@ -70,6 +70,8 @@ Since we already have the FMDB in the previous version so we need to support the
 
  To store the Business Model like `Address`,  make it adopt `GRDBEntityType` protocol
 
+ `GRDBEntityType` is protocol type to support Fetchable and Persistable 
+
  Note: We need to create the table for each Business Model in the  [Migration](#Migration)
 
 ```swift
@@ -77,27 +79,6 @@ import GRDB
 import BusinessModel
 
 extension Address: GRDBEntityType {}
-
-extension GRDBContext: AddressStorageType {
-    public func save(_ entity: Address, for nameSpace: String) throws {
-        try dbQueue.inDatabase({ db in
-            try entity.insert(db)
-        })
-    }
-
-    public func getZADByLanguage(_ language: String) throws -> [Address]? {
-        let zadByLanguage = Address.filter(Column("language") == language)
-        return try dbQueue.inDatabase { db in
-            try zadByLanguage.fetchAll(db)
-        }
-    }
-    
-    public func clearAddressBy(_ language: String) throws  {
-        try dbQueue.inDatabase { db in
-            _ = try Address.filter(Column("language") == language).deleteAll(db)
-        }
-    }
-}
 ```
 
 - In order to make appropriate persist to the database, we should call through specific StorageType. The AddressStorageType is an example
