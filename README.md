@@ -44,6 +44,9 @@ Migration is required to define the name, type of column in table
  ```
 
 ## Setup
+
+StorageManager is a singleton that wraps the storage context then provide to the client access through the `ClientType` protocol. So first step interact with the Storage is setting up the context
+
 ```swift
     do {
             let grdbContext = try GRDBContext(in: application)
@@ -52,27 +55,31 @@ Migration is required to define the name, type of column in table
             print(error)
     }
 ```
-
-- Making request
-```swift
-    do {
-            let address = Address(...)
-            try StorageManager.shared.storageContext?.address.save(address, for: "SG")
-        }catch {
-            print(error)
-    }
-```
-
-## Usage
 Since we already have the FMDB in the previous version so we need to support the migration -> Ideally we will have some kind of adapter to fetch the old ZAD format model from the current .sql then store in the new format.
 
-- Define Data Object
+- Define Data Model
 
- To store the Business Model like `Address`,  make it adopt `GRDBEntityType` protocol
-
- `GRDBEntityType` is protocol type to support Fetchable and Persistable 
+Persistable Record Types are Responsible for Their Tables, so define one record type per database table, and make it adopt a `PersistableRecord` & `Fetchable` protocol and `GRDBEntityType` is a grouped of these two type
 
  Note: We need to create the table for each Business Model in the  [Migration](#Migration)
+
+```swift
+struct Author: Codable {
+    var id: Int64?
+    var name: String
+    var country: String?
+}
+
+// Add Database access
+extension Author: GRDBEntityType {
+    // OPtional: Update auto-incremented id upon successful insertion
+    mutating func didInsert(with rowID: Int64, for column: String?) {
+        id = rowID
+    }
+}
+```
+
+To reuse the Bussiness Model, just make it adopt with `GRDBEntityType` 
 
 ```swift
 import GRDB
@@ -81,20 +88,14 @@ import BusinessModel
 extension Address: GRDBEntityType {}
 ```
 
-- In order to make appropriate persist to the database, we should call through specific StorageType. The AddressStorageType is an example
+
+- In order to make appropriate persist to the database, we should call through specific StorageType. The `AddressStorageType` is an example
  
 ```swift
 public protocol AddressStorageType {
     func save(_ entity: Address, for nameSpace: String) throws
     func getZADByLanguage(_ language: String) throws -> [Address]?
     func clearZADBy(_ language: String) throws
-}
-```
-
-- Define Client in `GRDBContext `
-```swift
-public protocol ClientType {
-    var address: AddressStorageType { get }
 }
 ```
 
@@ -123,6 +124,18 @@ extension GRDBContext: AddressStorageType {
         }
     }
 }
+```
+
+## Usage
+
+- Making request
+```swift
+    do {
+            let address = Address(...)
+            try StorageManager.shared.storageContext?.address.save(address, for: "SG")
+        }catch {
+            print(error)
+    }
 ```
 
 ## Sample Project

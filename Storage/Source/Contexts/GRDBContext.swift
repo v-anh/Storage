@@ -12,10 +12,7 @@ import UIKit
 
 public typealias GRDBEntityType = FetchableRecord & PersistableRecord
 
-
 public final class GRDBContext: StorageType {
-    
-    
     public var zad: ZADStorageType { return self }
     public var feed: FeedStorageType { return self }
     public var brand: BrandStoreType { return self }

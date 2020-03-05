@@ -9,14 +9,11 @@
 import Foundation
 import GRDB
 
-public protocol ClientType {
+public protocol StorageType {
     var zad: ZADStorageType { get }
     var feed: FeedStorageType { get }
     var brand: BrandStoreType { get }
 }
-
-public typealias StorageType = ClientType
-
 
 public class StorageManager {
     // MARK: - Public properties
@@ -28,12 +25,5 @@ public class StorageManager {
     }
     
     public var storageContext: StorageType?
-    
-    private func databaseUrl(_ databaseName: String) throws ->  URL {
-        return try FileManager.default
-            .url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            .appendingPathComponent(databaseName)
-    }
-
 }
 
