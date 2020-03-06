@@ -1,9 +1,9 @@
 # iOS Components - Storage
 
-In the pursuit of improving iOS codebase and migrate to new iOS architecture, we need to document each used components to be able to improve it and consolidate our foundations. This one define our storage components.
+In the pursuit of improving iOS codebase and migrate to new iOS architecture, we need to document each used component to be able to improve it and consolidate our foundations. This one defines our storage components.
 
 ---
-Storage is an database wrapper that provide functional througnt ClientType. Ideally for each type of Entity will have it's ClientType.
+Storage is a database wrapper that provides functional through ClientType. Ideally for each type of Entity will have its ClientType.
 
 Each ClientType will define the specific fetch, persis or update depend on the business logic required
 
@@ -11,7 +11,7 @@ Each ClientType will define the specific fetch, persis or update depend on the b
 
 The template for this idea above may look like:
 
-* Each EnityType will prepersent the data table 
+* Each EnityType will represent the data table 
 
 ```swift
 public protocol BrandEntityType {
@@ -22,7 +22,7 @@ public protocol BrandEntityType {
 }
 ```
 
-* So each EntityType will has ClientType prepersent functions to access that table like save, get data by ID, delete, etc.
+* So each EntityType will have ClientType represent functions to access that table like save, get data by ID, delete, etc.
 ```swift
 public protocol BrandClientType {
     func save(_ entity: BrandEntityType, for nameSpace: String) throws
@@ -36,7 +36,7 @@ public protocol ClientType {
 }
 ```
 
-The Context will make the approriate query to database base on these ClientType's function
+The Context will make the appropriate query to the database base on these ClientType's function
 ```swift
 extension StorageContext: BrandClientType {
     public func delete(_ id: String) throws -> Int {
@@ -70,7 +70,6 @@ To use it in the main app, just make the call through the client
   let brand = Brand(...)
   try Storage.shared.storageContext?.brand.save(brand)
   ```
-
-
-  ## Storage wrapper with GRDB 
+  
+## Storage wrapper with GRDB 
   [Storage](https://github.com/v-anh/Storage/blob/master/GRDBContext.md)
