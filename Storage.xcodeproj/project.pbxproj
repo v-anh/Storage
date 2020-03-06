@@ -10,7 +10,6 @@
 		661DE306240CF35100C64C4F /* ZADStoreType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661DE305240CF35100C64C4F /* ZADStoreType.swift */; };
 		66566CF1240F99B100CA32F3 /* StorageConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66566CF0240F99B100CA32F3 /* StorageConfiguration.swift */; };
 		665D017B24123418003F5C82 /* StorageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665D017A24123418003F5C82 /* StorageHelper.swift */; };
-		665D017E24123523003F5C82 /* EntityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665D017D24123523003F5C82 /* EntityType.swift */; };
 		665D018124123571003F5C82 /* BrandEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665D018024123571003F5C82 /* BrandEntity.swift */; };
 		66684AE6240768130026DBA5 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66684ADC240768130026DBA5 /* Storage.framework */; };
 		66684AEB240768130026DBA5 /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66684AEA240768130026DBA5 /* StorageTests.swift */; };
@@ -66,7 +65,6 @@
 		661DE305240CF35100C64C4F /* ZADStoreType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZADStoreType.swift; sourceTree = "<group>"; };
 		66566CF0240F99B100CA32F3 /* StorageConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageConfiguration.swift; sourceTree = "<group>"; };
 		665D017A24123418003F5C82 /* StorageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageHelper.swift; sourceTree = "<group>"; };
-		665D017D24123523003F5C82 /* EntityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityType.swift; sourceTree = "<group>"; };
 		665D018024123571003F5C82 /* BrandEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandEntity.swift; sourceTree = "<group>"; };
 		66684ADC240768130026DBA5 /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66684ADF240768130026DBA5 /* Storage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Storage.h; path = ../Storage.h; sourceTree = "<group>"; };
@@ -118,14 +116,6 @@
 				665D017A24123418003F5C82 /* StorageHelper.swift */,
 			);
 			path = Helper;
-			sourceTree = "<group>";
-		};
-		665D017C24123519003F5C82 /* Entity */ = {
-			isa = PBXGroup;
-			children = (
-				665D017D24123523003F5C82 /* EntityType.swift */,
-			);
-			path = Entity;
 			sourceTree = "<group>";
 		};
 		665D017F24123562003F5C82 /* Brand */ = {
@@ -230,7 +220,6 @@
 		66684C812407CEB50026DBA5 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				665D017C24123519003F5C82 /* Entity */,
 				665F80A024122E8100E99787 /* Configuration */,
 				665F809F24122E4700E99787 /* StorageError */,
 				66684C842407CFE40026DBA5 /* Contexts */,
@@ -386,7 +375,6 @@
 				665D017B24123418003F5C82 /* StorageHelper.swift in Sources */,
 				66894B36240E731000B29491 /* BrandStoreType.swift in Sources */,
 				66684AF72407683F0026DBA5 /* Storage.swift in Sources */,
-				665D017E24123523003F5C82 /* EntityType.swift in Sources */,
 				66894B29240E724200B29491 /* FeedStorageType.swift in Sources */,
 				665D018124123571003F5C82 /* BrandEntity.swift in Sources */,
 				66684C832407CED00026DBA5 /* StorageErrors.swift in Sources */,

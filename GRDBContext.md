@@ -33,10 +33,11 @@ Migration is required to define the name, type of column in table
     internal class var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("Zalora-v1") { database in
-            try database.create(table: "ZADObject") { tableDefinition in
-                tableDefinition.column("id",.integer).primaryKey()
-                tableDefinition.column("dataKey",.text)
-                tableDefinition.column("object",.blob)
+            try database.create(table: "brandRGDB") { tableDefinition in
+                tableDefinition.column("brandId", .text).primaryKey()
+                tableDefinition.column("image", .text)
+                tableDefinition.column("keywords", .text)
+                tableDefinition.column("name", .text)
             }
         }
         return migrator
@@ -45,58 +46,64 @@ Migration is required to define the name, type of column in table
 
 ## Setup
 
-StorageManager is a singleton that wraps the storage context then provide to the client access through the `ClientType` protocol. So first step interact with the Storage is setting up the context
+Storage is a singleton that wraps the storage context then provide to the client access through the `ClientType` protocol. So first step interact with the Storage is setting up the context
 
 ```swift
-    do {
-            let grdbContext = try GRDBContext(in: application)
-            StorageManager.setup(storageContext: grdbContext)
-        } catch {
+    // Setup Storage component
+        do {
+            let config = StorageConfiguration(storageContext: .sql(databaseName: "zalora"), application: application) {  print($0) }
+            try Storage.setup(config: config)
+        }catch {
             print(error)
-    }
+        }
 ```
-Since we already have the FMDB in the previous version so we need to support the migration -> Ideally we will have some kind of adapter to fetch the old ZAD format model from the current .sql then store in the new format.
-
-- Define Data Model
+- Define Entity
 
 Persistable Record Types are Responsible for Their Tables, so define one record type per database table, and make it adopt a `PersistableRecord` & `Fetchable` protocol and `GRDBEntityType` is a grouped of these two type
 
- Note: We need to create the table for each Business Model in the  [Migration](#Migration)
+ Note: We need to create the table for each Entity in the  [Migration](#Migration)
 
+Define the public protocol for each Entity that will expose to the Main app
 ```swift
-struct Author: Codable {
-    var id: Int64?
-    var name: String
-    var country: String?
+public protocol BrandEntityType {
+    var brandId: String { get }
+    var image: String { get set}
+    var keywords: String { get set}
+    var name: String { get set}
 }
+```
 
-// Add Database access
-extension Author: GRDBEntityType {
-    // OPtional: Update auto-incremented id upon successful insertion
-    mutating func didInsert(with rowID: Int64, for column: String?) {
-        id = rowID
+Create entity adopt with `EntityType`. To make sure this entity able to persistable or fetchable we need to adopt with  `GRDBEntityType`
+
+Mapping will tranform from EntityType to GRDB Entity
+```swift
+public struct BrandRGDB: Codable, BrandEntityType, GRDBEntityType {
+    public var brandId: String
+    public var image: String
+    public var keywords: String
+    public var name: String
+
+    public init(brandId: String ,image: String, keywords: String, name: String) {
+        self.brandId = brandId
+        self.image = image
+        self.keywords = keywords
+        self.name = name
+    }
+    
+    static func map(_ brand: BrandEntityType) -> BrandRGDB {
+        return BrandRGDB(brandId: brand.brandId, image: brand.image, keywords: brand.keywords, name: brand.name)
     }
 }
 ```
 
-To reuse the Bussiness Model, just make it adopt with `GRDBEntityType` 
-
-```swift
-import GRDB
-import BusinessModel
-
-extension Address: GRDBEntityType {}
-```
-
-
-- In order to make appropriate persist to the database, we should call through specific StorageType. The `AddressStorageType` is an example
+- In order to make appropriate persist to the database, we should call through specific StorageType. The `BrandClientType` is an example
  
 ```swift
-public protocol AddressStorageType {
-    func save(_ entity: Address, for nameSpace: String) throws
-    func getZADByLanguage(_ language: String) throws -> [Address]?
-    func clearZADBy(_ language: String) throws
-}
+public protocol BrandClientType {
+    func save(_ entity: BrandEntityType, for nameSpace: String) throws
+    func getBrandByLanguage(_ language: String) throws -> [BrandEntityType]?
+    func clearBrandBy(_ language: String) throws
+    func delete(_ id: String) throws -> Int
 ```
 
 - `GRDB is not a managed ORM and GRDB can't provide implicit isolation: the application must decide when it wants to safely read the information in the database, and this decision is made explicit` 
@@ -104,23 +111,28 @@ public protocol AddressStorageType {
 It may better to define the query interface depend on the Model type itself with a simple rule: consumed data must come from a single database access method
 
 ```swift
-extension GRDBContext: AddressStorageType {
-    public func save(_ entity: Address, for nameSpace: String) throws {
+extension GRDBContext: BrandClientType {
+    public func delete(_ id: String) throws -> Int {
+        return try dbQueue.inDatabase({ db in
+            try BrandRGDB.filter(Column("brandId") == id).deleteAll(db)
+        })
+    }
+    
+    public func save(_ entity: BrandEntityType, for nameSpace: String) throws {
         try dbQueue.inDatabase({ db in
-            try entity.insert(db)
+            try BrandRGDB.map(entity).insert(db)
         })
     }
 
-    public func getZADByLanguage(_ language: String) throws -> [Address]? {
-        let zadByLanguage = Address.filter(Column("language") == language)
+    public func getBrandByLanguage(_ language: String) throws -> [BrandEntityType]? {
         return try dbQueue.inDatabase { db in
-            try zadByLanguage.fetchAll(db)
+            try BrandRGDB.fetchAll(db)
         }
     }
     
-    public func clearAddressBy(_ language: String) throws  {
+    public func clearBrandBy(_ language: String) throws  {
         try dbQueue.inDatabase { db in
-            _ = try Address.filter(Column("language") == language).deleteAll(db)
+            _ = try BrandRGDB.filter(Column("language") == language).deleteAll(db)
         }
     }
 }
@@ -130,12 +142,8 @@ extension GRDBContext: AddressStorageType {
 
 - Making request
 ```swift
-    do {
-            let address = Address(...)
-            try StorageManager.shared.storageContext?.address.save(address, for: "SG")
-        }catch {
-            print(error)
-    }
+    let brand = Brand(...)
+    try Storage.shared.storageContext?.brand.save(brand)
 ```
 
 ## Sample Project
