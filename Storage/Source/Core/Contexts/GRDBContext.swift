@@ -12,26 +12,41 @@ import UIKit
 
 public typealias GRDBEntityType = FetchableRecord & PersistableRecord
 
-public final class GRDBContext: StorageType {
+public final class GRDBContext: StorageContext {
     public var zad: ZADStorageType { return self }
     public var feed: FeedStorageType { return self }
-    public var brand: BrandStoreType { return self }
+    public var brand: BrandClientType { return self }
     
     var dbQueue: DatabaseQueue
 
-    public init(in application: UIApplication, databaseName: String, trace: ((String) -> Void)? = nil) throws {
-        let databaseURL = try FileManager.default
-            .url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            .appendingPathComponent("\(databaseName).sql")
-
+    public init(in application: UIApplication? = nil, databaseName: String, trace: ((String) -> Void)? = nil) throws {
         var grdbConfig = Configuration()
-        grdbConfig.trace = trace
+               grdbConfig.trace = trace
 
+        let databaseURL = try StorageHelper.getDatabaseUrl(databaseName: databaseName)
         dbQueue = try DatabaseQueue(path: databaseURL.path,configuration: grdbConfig)
+        
+        try self.applyMigration()
+        
+        self.setupMemmoryManagement(application)
+    }
+    
+    public func clearAllData() {
+    }
+}
+
+extension GRDBContext{
+    private func applyMigration() throws {
         try GRDBContext.migrator.migrate(dbQueue)
+    }
+    private func setupMemmoryManagement(_ application: UIApplication?) {
+        guard let application = application else {
+            return
+        }
         dbQueue.setupMemoryManagement(in: application)
     }
 }
+
 
 extension GRDBContext {
     public static var migrator: DatabaseMigrator {
@@ -52,7 +67,7 @@ extension GRDBContext {
                 tableDefinition.column("feedPosition", .text)
             }
             
-            try database.create(table: "brand") { tableDefinition in
+            try database.create(table: "brandRGDB") { tableDefinition in
                 tableDefinition.column("brandId", .text).primaryKey()
                 tableDefinition.column("image", .text)
                 tableDefinition.column("keywords", .text)

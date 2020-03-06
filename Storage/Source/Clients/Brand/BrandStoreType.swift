@@ -8,39 +8,36 @@
 
 import Foundation
 import GRDB
-import BusinessModel
 
-extension Brand: GRDBEntityType {}
-
-public protocol BrandStoreType {
-    func save(_ entity: Brand, for nameSpace: String) throws
-    func getBrandByLanguage(_ language: String) throws -> [Brand]?
+public protocol BrandClientType {
+    func save(_ entity: BrandEntityType, for nameSpace: String) throws
+    func getBrandByLanguage(_ language: String) throws -> [BrandEntityType]?
     func clearBrandBy(_ language: String) throws
     func delete(_ id: String) throws -> Int
 }
 
-extension GRDBContext: BrandStoreType {
+extension GRDBContext: BrandClientType {
     public func delete(_ id: String) throws -> Int {
         return try dbQueue.inDatabase({ db in
-            try Brand.filter(Column("brandId") == id).deleteAll(db)
+            try BrandRGDB.filter(Column("brandId") == id).deleteAll(db)
         })
     }
     
-    public func save(_ entity: Brand, for nameSpace: String) throws {
+    public func save(_ entity: BrandEntityType, for nameSpace: String) throws {
         try dbQueue.inDatabase({ db in
-            try entity.insert(db)
+            try BrandRGDB.map(entity).insert(db)
         })
     }
 
-    public func getBrandByLanguage(_ language: String) throws -> [Brand]? {
+    public func getBrandByLanguage(_ language: String) throws -> [BrandEntityType]? {
         return try dbQueue.inDatabase { db in
-            try Brand.fetchAll(db)
+            try BrandRGDB.fetchAll(db)
         }
     }
     
     public func clearBrandBy(_ language: String) throws  {
         try dbQueue.inDatabase { db in
-            _ = try Brand.filter(Column("language") == language).deleteAll(db)
+            _ = try BrandRGDB.filter(Column("language") == language).deleteAll(db)
         }
     }
 }

@@ -20,13 +20,13 @@ protocol BrandServiceProtocol {
 struct BrandService: BrandServiceProtocol {
     func delete(id: String) -> AnyPublisher<Int, Error> {
         Just(id).tryCompactMap { language in
-            return try StorageManager.shared.storageContext?.brand.delete(id)
+            return try Storage.shared.storageContext?.brand.delete(id)
         }.eraseToAnyPublisher()
     }
     
     func getBrandList() -> AnyPublisher<[Brand],Error> {
         return Just("EN").tryCompactMap { language in
-            return try StorageManager.shared.storageContext?.brand.getBrandByLanguage("SG")
+            return try Storage.shared.storageContext?.brand.getBrandByLanguage("SG")?.map(Brand.map(_:))
         }.eraseToAnyPublisher()
     }
     
@@ -36,7 +36,29 @@ struct BrandService: BrandServiceProtocol {
         let brand = Brand(brandId: UUID().uuidString, image: "", keywords: randomKeyWork, name: randomBrand)
         
         return Just(brand).tryCompactMap { language in
-            try StorageManager.shared.storageContext?.brand.save(brand, for: "SG")
+            try Storage.shared.storageContext?.brand.save(brand, for: "SG")
         }.eraseToAnyPublisher()
+    }
+}
+
+
+class Brand: BrandEntityType {
+    var brandId: String
+    
+    var image: String
+    
+    var keywords: String
+    
+    var name: String
+    
+    init(brandId: String, image: String, keywords: String, name: String) {
+        self.brandId = brandId
+        self.image = image
+        self.keywords = keywords
+        self.name = name
+    }
+    
+    static func map(_ brand: BrandEntityType) -> Brand {
+        return Brand(brandId: brand.brandId, image: brand.image, keywords: brand.keywords, name: brand.name)
     }
 }

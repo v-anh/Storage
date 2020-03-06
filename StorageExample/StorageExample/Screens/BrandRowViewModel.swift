@@ -23,5 +23,5 @@ class BrandRowViewModel: ObservableObject, Identifiable {
 }
 
 extension Brand: Identifiable {
-    
+   
 }
