@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		664F372A241636750053D720 /* Brand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664F3729241636750053D720 /* Brand.swift */; };
 		66566CF9240F9EA000CA32F3 /* BrandListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66566CF8240F9EA000CA32F3 /* BrandListView.swift */; };
 		66566CFF240F9F0C00CA32F3 /* BrandListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66566CFE240F9F0C00CA32F3 /* BrandListViewModel.swift */; };
 		66566D02240F9F9900CA32F3 /* BrandService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66566D01240F9F9900CA32F3 /* BrandService.swift */; };
@@ -48,6 +49,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		664F3729241636750053D720 /* Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Brand.swift; sourceTree = "<group>"; };
 		66566CF8240F9EA000CA32F3 /* BrandListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandListView.swift; sourceTree = "<group>"; };
 		66566CFE240F9F0C00CA32F3 /* BrandListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandListViewModel.swift; sourceTree = "<group>"; };
 		66566D01240F9F9900CA32F3 /* BrandService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandService.swift; sourceTree = "<group>"; };
@@ -86,6 +88,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		664F372B241636930053D720 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				664F3729241636750053D720 /* Brand.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		66566CF7240F9E6B00CA32F3 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -127,6 +137,7 @@
 		66684C492407C8180026DBA5 /* StorageExample */ = {
 			isa = PBXGroup;
 			children = (
+				664F372B241636930053D720 /* Model */,
 				66566D00240F9F7F00CA32F3 /* Services */,
 				66566CF7240F9E6B00CA32F3 /* Screens */,
 				66684C4A2407C8180026DBA5 /* AppDelegate.swift */,
@@ -268,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				66684C4B2407C8180026DBA5 /* AppDelegate.swift in Sources */,
+				664F372A241636750053D720 /* Brand.swift in Sources */,
 				66566D04240FA6EB00CA32F3 /* BrandRowView.swift in Sources */,
 				66684C4D2407C8180026DBA5 /* SceneDelegate.swift in Sources */,
 				66684C4F2407C8180026DBA5 /* ContentView.swift in Sources */,

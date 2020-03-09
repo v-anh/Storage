@@ -16,13 +16,13 @@ public protocol BrandEntityType {
 }
 
 
-public struct BrandRGDB: Codable, BrandEntityType, GRDBEntityType {
+struct BrandRGDB: Codable, BrandEntityType, GRDBEntityType {
     public var brandId: String
     public var image: String
     public var keywords: String
     public var name: String
 
-    public init(brandId: String ,image: String, keywords: String, name: String) {
+    init(brandId: String ,image: String, keywords: String, name: String) {
         self.brandId = brandId
         self.image = image
         self.keywords = keywords
